@@ -1,6 +1,6 @@
 part of './flutter_command.dart';
 
-class UsecaseCommandSync<TUsecase, TParam, TResult> extends UsecaseCommand<TUsecase, TParam, TResult> {
+class UsecaseCommandSync<TUsecase extends Object, TParam, TResult> extends UsecaseCommand<TUsecase, TParam, TResult> {
   final TResult Function(TUsecase, TParam)? _func;
   final TResult Function(TUsecase)? _funcNoParam;
 
