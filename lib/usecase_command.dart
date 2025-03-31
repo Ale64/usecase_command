@@ -15,6 +15,8 @@ abstract class UsecaseCommand<TUsecase, TParam, TResult> extends Command<TParam,
 
   TUsecase? _usecase;
 
+  void call([TParam? param]) => execute(param);
+
   void setUsecase(TUsecase usecase) {
     _usecase = usecase;
   }
