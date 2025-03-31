@@ -1,4 +1,4 @@
-import 'package:flutter_command/flutter_command.dart';
+import 'package:usecase_command/flutter_command.dart';
 import 'package:test/test.dart';
 
 enum TestType { error, exception, assertion }

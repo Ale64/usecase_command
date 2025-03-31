@@ -11,7 +11,7 @@ import 'package:stack_trace/stack_trace.dart';
 
 import 'error_filters.dart';
 
-export 'package:flutter_command/error_filters.dart';
+export 'error_filters.dart';
 export 'package:functional_listener/functional_listener.dart';
 
 part './async_command.dart';
@@ -19,6 +19,9 @@ part './mock_command.dart';
 part './sync_command.dart';
 part './undoable_command.dart';
 part './command_builder.dart';
+part './usecase_command.dart';
+part './usecase_command_async.dart';
+part './usecase_command_sync.dart';
 
 /// Combined execution state of a `Command` represented using four of its fields.
 /// A [CommandResult] will be issued for any state change of any of its fields
@@ -39,16 +42,12 @@ class CommandResult<TParam, TResult> {
   const CommandResult(this.paramData, this.data, this.error, this.isExecuting,
       {this.errorReaction, this.stackTrace, this.isUndoValue = false});
 
-  const CommandResult.data(TParam? param, TResult data)
-      : this(param, data, null, false);
+  const CommandResult.data(TParam? param, TResult data) : this(param, data, null, false);
 
-  const CommandResult.error(TParam? param, dynamic error,
-      ErrorReaction errorReaction, StackTrace? stackTrace)
-      : this(param, null, error, false,
-            errorReaction: errorReaction, stackTrace: stackTrace);
+  const CommandResult.error(TParam? param, dynamic error, ErrorReaction errorReaction, StackTrace? stackTrace)
+      : this(param, null, error, false, errorReaction: errorReaction, stackTrace: stackTrace);
 
-  const CommandResult.isLoading([TParam? param])
-      : this(param, null, null, true);
+  const CommandResult.isLoading([TParam? param]) : this(param, null, null, true);
 
   const CommandResult.blank() : this(null, null, null, false);
 
@@ -68,8 +67,7 @@ class CommandResult<TParam, TResult> {
       other.isExecuting == isExecuting;
 
   @override
-  int get hashCode => hash4(
-      data.hashCode, error.hashCode, isExecuting.hashCode, paramData.hashCode);
+  int get hashCode => hash4(data.hashCode, error.hashCode, isExecuting.hashCode, paramData.hashCode);
 
   @override
   String toString() {
@@ -108,9 +106,7 @@ class CommandError<TParam> {
 
   @override
   bool operator ==(Object other) =>
-      other is CommandError<TParam> &&
-      other.paramData == paramData &&
-      other.error == error;
+      other is CommandError<TParam> && other.paramData == paramData && other.error == error;
 
   @override
   int get hashCode => hash2(error.hashCode, paramData.hashCode);
@@ -166,18 +162,14 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
         _name = name,
         super(
           initialValue,
-          mode: notifyOnlyWhenValueChanges
-              ? CustomNotifierMode.normal
-              : CustomNotifierMode.always,
+          mode: notifyOnlyWhenValueChanges ? CustomNotifierMode.normal : CustomNotifierMode.always,
         ) {
     _commandResult = CustomValueNotifier<CommandResult<TParam?, TResult>>(
       CommandResult.data(null, initialValue),
     );
 
     /// forward error states to the `errors` Listenable
-    _commandResult
-        .where((x) => x.hasError && x.errorReaction!.shouldCallLocalHandler)
-        .listen((x, _) {
+    _commandResult.where((x) => x.hasError && x.errorReaction!.shouldCallLocalHandler).listen((x, _) {
       final originalError = CommandError<TParam>(
         paramData: x.paramData,
         error: x.error!,
@@ -190,10 +182,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
           ? (error, stackTrace) => {
                 globalExceptionHandler?.call(
                   CommandError<TParam>(
-                      error: error,
-                      command: this,
-                      originalError: originalError,
-                      errorReaction: ErrorReaction.none),
+                      error: error, command: this, originalError: originalError, errorReaction: ErrorReaction.none),
                   stackTrace,
                 )
               }
@@ -277,8 +266,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
         return;
       }
 
-      _commandResult.value = CommandResult<TParam, TResult>(
-          param, _noReturnValue ? null : result, null, false);
+      _commandResult.value = CommandResult<TParam, TResult>(param, _noReturnValue ? null : result, null, false);
 
       /// make sure set _isExecuting to false before we notify the listeners
       /// in case the listener wants to call another command that is restricted
@@ -315,11 +303,8 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
     }
   }
 
-  StackTrace _mandatoryErrorHandling(
-      StackTrace stacktrace, Object error, TParam? param) {
-    StackTrace chain = Command.detailedStackTraces
-        ? _improveStacktrace(stacktrace).terse
-        : stacktrace;
+  StackTrace _mandatoryErrorHandling(StackTrace stacktrace, Object error, TParam? param) {
+    StackTrace chain = Command.detailedStackTraces ? _improveStacktrace(stacktrace).terse : stacktrace;
 
     if (Command.assertionsAlwaysThrow && error is AssertionError) {
       Error.throwWithStackTrace(error, chain);
@@ -355,8 +340,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// emits [CommandResult<TResult>] the combined state of the command, which is
   /// often easier in combination with Flutter's `ValueListenableBuilder`
   /// because you have all state information at one place.
-  ValueListenable<CommandResult<TParam?, TResult>> get results =>
-      _commandResult;
+  ValueListenable<CommandResult<TParam?, TResult>> get results => _commandResult;
 
   /// `ValueListenable`  that changes its value on any change of the execution
   /// state change of the command, to allow the UI to easier update its state
@@ -408,8 +392,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// any Command of the app. Ideal for logging.
   /// the [name] of the Command that was responsible for the error is inside
   /// the error object.
-  static void Function(CommandError<dynamic> error, StackTrace stackTrace)?
-      globalExceptionHandler;
+  static void Function(CommandError<dynamic> error, StackTrace stackTrace)? globalExceptionHandler;
 
   /// if no individual ErrorFilter is set when creating a Command
   /// this filter is used in case of an error
@@ -427,8 +410,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   // by setting this to true, the Command will directly rethrow any exception
   // so that you can get a helpfult stacktrace.
   // works only in debug mode
-  @Deprecated(
-      'use reportAllExeceptions instead, it turned out that throwing does not help as much as expected')
+  @Deprecated('use reportAllExeceptions instead, it turned out that throwing does not help as much as expected')
   static bool debugErrorsThrowAlways = false;
 
   /// overrides any ErrorFilter that is set for a Command and will call the global exception handler
@@ -454,22 +436,17 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// optional handler that will get called on all `Command` executions if the Command
   /// has a set a name.
   /// [commandName] the [name] of the Command
-  static void Function(
-          String? commandName, CommandResult<dynamic, dynamic> result)?
-      loggingHandler;
+  static void Function(String? commandName, CommandResult<dynamic, dynamic> result)? loggingHandler;
 
   /// as we don't want that anyone changes the values of these ValueNotifiers
   /// properties we make them private and only publish their `ValueListenable`
   /// interface via getters.
   late CustomValueNotifier<CommandResult<TParam?, TResult>> _commandResult;
-  final CustomValueNotifier<bool> _isExecutingAsync =
-      CustomValueNotifier<bool>(false, asyncNotification: true);
-  final CustomValueNotifier<bool> _isExecuting =
-      CustomValueNotifier<bool>(false);
+  final CustomValueNotifier<bool> _isExecutingAsync = CustomValueNotifier<bool>(false, asyncNotification: true);
+  final CustomValueNotifier<bool> _isExecuting = CustomValueNotifier<bool>(false);
   late ValueNotifier<bool> _canExecute;
   late final ValueListenable<bool>? _restriction;
-  final CustomValueNotifier<CommandError<TParam>?> _errors =
-      CustomValueNotifier<CommandError<TParam>?>(
+  final CustomValueNotifier<CommandError<TParam>?> _errors = CustomValueNotifier<CommandError<TParam>?>(
     null,
     mode: CustomNotifierMode.manual,
   );
@@ -479,8 +456,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// prevent memory leaks
   @override
   void dispose() {
-    assert(!_isDisposing,
-        'You are trying to dispose a Command that was already disposed. This is not allowed.');
+    assert(!_isDisposing, 'You are trying to dispose a Command that was already disposed. This is not allowed.');
     _isDisposing = true;
 
     /// ensure that all ValueNotifiers have finished their async notifications
@@ -561,17 +537,14 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
           const SizedBox();
     }
     if (isExecuting.value) {
-      return whileExecuting?.call(value, _commandResult.value.paramData) ??
-          const SizedBox();
+      return whileExecuting?.call(value, _commandResult.value.paramData) ?? const SizedBox();
     }
     return onResult(value, _commandResult.value.paramData);
   }
 
-  bool get _hasLocalErrorHandler =>
-      _commandResult.listenerCount >= 2 || _errors.hasListeners;
+  bool get _hasLocalErrorHandler => _commandResult.listenerCount >= 2 || _errors.hasListeners;
 
-  void _handleErrorFiltered(
-      TParam? param, Object error, StackTrace stackTrace) {
+  void _handleErrorFiltered(TParam? param, Object error, StackTrace stackTrace) {
     var errorReaction = _errorFilter.filter(error, stackTrace);
     if (errorReaction == ErrorReaction.defaulErrorFilter) {
       errorReaction = errorFilterDefault.filter(error, stackTrace);
@@ -651,11 +624,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
     if (callGlobal) {
       globalExceptionHandler?.call(
         CommandError(
-            paramData: param,
-            error: error,
-            command: this,
-            errorReaction: errorReaction,
-            stackTrace: stackTrace),
+            paramData: param, error: error, command: this, errorReaction: errorReaction, stackTrace: stackTrace),
         stackTrace,
       );
     }
@@ -672,11 +641,8 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
         .where((frame) => switch (frame) {
                   Frame(package: 'stack_trace') => false,
                   Frame(:final member) when member!.contains('Zone') => false,
-                  Frame(:final member) when member!.contains('_rootRun') =>
-                    false,
-                  Frame(package: 'flutter_command', :final member)
-                      when member!.contains('_execute') =>
-                    false,
+                  Frame(:final member) when member!.contains('_rootRun') => false,
+                  Frame(package: 'flutter_command', :final member) when member!.contains('_execute') => false,
                   _ => true,
                 }
 
@@ -716,9 +682,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
     }
     trace = Trace(strippedFrames);
 
-    final framesBefore = _traceBeforeExecute?.frames
-            .where((frame) => frame.package != 'flutter_command') ??
-        [];
+    final framesBefore = _traceBeforeExecute?.frames.where((frame) => frame.package != 'flutter_command') ?? [];
 
     final chain = Chain([
       trace,
@@ -768,9 +732,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
       funcNoParam: action,
       initialValue: null,
       restriction: restriction,
-      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null
-          ? (_) => ifRestrictedExecuteInstead()
-          : null,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
       includeLastResultInCommandResults: false,
       noReturnValue: true,
       errorFilter: errorFilter,
@@ -868,9 +830,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
       funcNoParam: func,
       initialValue: initialValue,
       restriction: restriction,
-      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null
-          ? (_) => ifRestrictedExecuteInstead()
-          : null,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
       includeLastResultInCommandResults: includeLastResultInCommandResults,
       noReturnValue: false,
       errorFilter: errorFilter,
@@ -968,9 +928,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
       funcNoParam: action,
       initialValue: null,
       restriction: restriction,
-      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null
-          ? (_) => ifRestrictedExecuteInstead()
-          : null,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
       includeLastResultInCommandResults: false,
       noReturnValue: true,
       errorFilter: errorFilter,
@@ -1062,9 +1020,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
       funcNoParam: func,
       initialValue: initialValue,
       restriction: restriction,
-      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null
-          ? (_) => ifRestrictedExecuteInstead()
-          : null,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
       includeLastResultInCommandResults: includeLastResultInCommandResults,
       noReturnValue: false,
       errorFilter: errorFilter,
@@ -1162,9 +1118,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
       undo: undo,
       initialValue: null,
       restriction: restriction,
-      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null
-          ? (_) => ifRestrictedExecuteInstead()
-          : null,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
       undoOnExecutionFailure: undoOnExecutionFailure,
       includeLastResultInCommandResults: false,
       noReturnValue: true,
@@ -1270,9 +1224,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
       initialValue: initialValue,
       undoOnExecutionFailure: undoOnExecutionFailure,
       restriction: restriction,
-      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null
-          ? (_) => ifRestrictedExecuteInstead()
-          : null,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
       includeLastResultInCommandResults: includeLastResultInCommandResults,
       noReturnValue: false,
       errorFilter: errorFilter,

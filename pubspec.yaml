@@ -1,7 +1,7 @@
-name: flutter_command
-description: flutter_command is a way to manage your state based on `ValueListenable` and the `Command` design pattern.
+name: usecase_command
+description: usecase_command is a flutter_command with di.
 version: 7.2.2
-homepage: https://github.com/escamoteur/flutter_command
+homepage: https://github.com/Ale64/usecase_command
 
 environment:
   sdk: ">=3.5.0 <4.0.0"

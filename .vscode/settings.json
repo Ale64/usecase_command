@@ -11,5 +11,11 @@
         "dart": {
             "parser": "code"
         }
-    }
+    },
+    "dart.lineLength": 120,
+    "[dart]": {
+        "editor.rulers": [
+            120
+        ]
+    },
 }

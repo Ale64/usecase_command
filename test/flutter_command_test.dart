@@ -2,7 +2,7 @@
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_command/flutter_command.dart';
+import 'package:usecase_command/flutter_command.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// An object that can assist in representing the current state of Command while

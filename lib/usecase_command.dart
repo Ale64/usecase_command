@@ -1,0 +1,205 @@
+part of './flutter_command.dart';
+
+abstract class UsecaseCommand<TUsecase, TParam, TResult> extends Command<TParam, TResult> {
+  UsecaseCommand({
+    required super.initialValue,
+    required super.restriction,
+    required super.ifRestrictedExecuteInstead,
+    required super.includeLastResultInCommandResults,
+    required super.noReturnValue,
+    required super.notifyOnlyWhenValueChanges,
+    required super.errorFilter,
+    required super.name,
+    required super.noParamValue,
+  });
+
+  TUsecase? _usecase;
+
+  void setUsecase(TUsecase usecase) {
+    _usecase = usecase;
+  }
+
+  static UsecaseCommand<TUsecase, void, void> createSyncNoParamNoResult<TUsecase>(
+    void Function(TUsecase) action, {
+    ValueListenable<bool>? restriction,
+    void Function()? ifRestrictedExecuteInstead,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandSync<TUsecase, void, void>(
+      funcNoParam: action,
+      initialValue: null,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
+      includeLastResultInCommandResults: false,
+      noReturnValue: true,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: true,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, TParam, void> createSyncNoResult<TUsecase, TParam>(
+    void Function(TUsecase, TParam) action, {
+    ValueListenable<bool>? restriction,
+    ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandSync<TUsecase, TParam, void>(
+      func: action,
+      initialValue: null,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead,
+      includeLastResultInCommandResults: false,
+      noReturnValue: true,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: false,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, void, TResult> createSyncNoParam<TUsecase, TResult>(
+    TResult Function(TUsecase) func, {
+    required TResult initialValue,
+    ValueListenable<bool>? restriction,
+    void Function()? ifRestrictedExecuteInstead,
+    bool includeLastResultInCommandResults = false,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandSync<TUsecase, void, TResult>(
+      funcNoParam: func,
+      initialValue: initialValue,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
+      includeLastResultInCommandResults: includeLastResultInCommandResults,
+      noReturnValue: false,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: true,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, TParam, TResult> createSync<TUsecase, TParam, TResult>(
+    TResult Function(TUsecase, TParam) func, {
+    required TResult initialValue,
+    ValueListenable<bool>? restriction,
+    ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
+    bool includeLastResultInCommandResults = false,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandSync<TUsecase, TParam, TResult>(
+      func: func,
+      initialValue: initialValue,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead,
+      includeLastResultInCommandResults: includeLastResultInCommandResults,
+      noReturnValue: false,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: false,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, void, void> createAsyncNoParamNoResult<TUsecase>(
+    Future<void> Function(TUsecase) action, {
+    ValueListenable<bool>? restriction,
+    void Function()? ifRestrictedExecuteInstead,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandAsync<TUsecase, void, void>(
+      funcNoParam: action,
+      initialValue: null,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
+      includeLastResultInCommandResults: false,
+      noReturnValue: true,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: true,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, TParam, void> createAsyncNoResult<TUsecase, TParam>(
+    Future<void> Function(TUsecase, TParam) action, {
+    ValueListenable<bool>? restriction,
+    ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandAsync<TUsecase, TParam, void>(
+      func: action,
+      initialValue: null,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead,
+      includeLastResultInCommandResults: false,
+      noReturnValue: true,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: false,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, void, TResult> createAsyncNoParam<TUsecase, TResult>(
+    Future<TResult> Function(TUsecase) func, {
+    required TResult initialValue,
+    ValueListenable<bool>? restriction,
+    void Function()? ifRestrictedExecuteInstead,
+    bool includeLastResultInCommandResults = false,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandAsync<TUsecase, void, TResult>(
+      funcNoParam: func,
+      initialValue: initialValue,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead != null ? (_) => ifRestrictedExecuteInstead() : null,
+      includeLastResultInCommandResults: includeLastResultInCommandResults,
+      noReturnValue: false,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: true,
+    );
+  }
+
+  static UsecaseCommand<TUsecase, TParam, TResult> createAsync<TUsecase, TParam, TResult>(
+    Future<TResult> Function(TUsecase, TParam) func, {
+    required TResult initialValue,
+    ValueListenable<bool>? restriction,
+    ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
+    bool includeLastResultInCommandResults = false,
+    ErrorFilter? errorFilter,
+    bool notifyOnlyWhenValueChanges = false,
+    String? debugName,
+  }) {
+    return UsecaseCommandAsync<TUsecase, TParam, TResult>(
+      func: func,
+      initialValue: initialValue,
+      restriction: restriction,
+      ifRestrictedExecuteInstead: ifRestrictedExecuteInstead,
+      includeLastResultInCommandResults: includeLastResultInCommandResults,
+      noReturnValue: false,
+      errorFilter: errorFilter,
+      notifyOnlyWhenValueChanges: notifyOnlyWhenValueChanges,
+      name: debugName,
+      noParamValue: false,
+    );
+  }
+}
