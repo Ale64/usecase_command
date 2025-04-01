@@ -1,4 +1,4 @@
-part of './flutter_command.dart';
+part of './usecase_command.dart';
 
 class UndoStack<E> {
   final _list = <E>[];
@@ -44,8 +44,7 @@ typedef UndoFn<TUndoState, TResult> = FutureOr<TResult> Function(
   Object? reason,
 );
 
-class UndoableCommand<TParam, TResult, TUndoState>
-    extends CommandAsync<TParam, TResult> {
+class UndoableCommand<TParam, TResult, TUndoState> extends CommandAsync<TParam, TResult> {
   final Future<TResult> Function(TParam, UndoStack<TUndoState>)? _undoableFunc;
   final Future<TResult> Function(UndoStack<TUndoState>)? _undoableFuncNoParam;
   final UndoFn<TUndoState, TResult> _undofunc;
@@ -70,8 +69,7 @@ class UndoableCommand<TParam, TResult, TUndoState>
         _undofunc = undo,
         _undoOnExecutionFailure = undoOnExecutionFailure {
     _func = func != null ? (param) => _undoableFunc!(param, _undoStack) : null;
-    _funcNoParam =
-        funcNoParam != null ? () => _undoableFuncNoParam!(_undoStack) : null;
+    _funcNoParam = funcNoParam != null ? () => _undoableFuncNoParam!(_undoStack) : null;
   }
 
   final bool _undoOnExecutionFailure;

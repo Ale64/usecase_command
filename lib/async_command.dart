@@ -1,4 +1,4 @@
-part of './flutter_command.dart';
+part of './usecase_command.dart';
 
 class CommandAsync<TParam, TResult> extends Command<TParam, TResult> {
   Future<TResult> Function(TParam)? _func;

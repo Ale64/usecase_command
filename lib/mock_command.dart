@@ -1,4 +1,4 @@
-part of './flutter_command.dart';
+part of './usecase_command.dart';
 
 /// `MockCommand` allows you to easily mock an Command for your Unit and UI tests
 /// Mocking a command with `mockito` https://pub.dartlang.org/packages/mockito has its limitations.
@@ -24,9 +24,7 @@ class MockCommand<TParam, TResult> extends Command<TParam, TResult?> {
     super.notifyOnlyWhenValueChanges = false,
     super.name,
   }) {
-    _commandResult
-        .where((result) => result.hasData)
-        .listen((result, _) => value = result.data);
+    _commandResult.where((result) => result.hasData).listen((result, _) => value = result.data);
   }
 
   /// to be able to simulate any output of the command when it is called you can here queue the output data for the next execution call
@@ -59,8 +57,7 @@ class MockCommand<TParam, TResult> extends Command<TParam, TResult?> {
     if (returnValuesForNextExecute != null) {
       returnValuesForNextExecute!.map(
         (entry) {
-          if ((entry.isExecuting || entry.hasError) &&
-              _includeLastResultInCommandResults) {
+          if ((entry.isExecuting || entry.hasError) && _includeLastResultInCommandResults) {
             return CommandResult<TParam, TResult>(
               param,
               value,

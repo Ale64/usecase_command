@@ -1,4 +1,4 @@
-import 'package:usecase_command/flutter_command.dart';
+import 'package:usecase_command/usecase_command.dart';
 import 'package:test/test.dart';
 
 enum TestType { error, exception, assertion }
@@ -77,21 +77,18 @@ void main() {
     });
   });
   group('ErrorRection.none', () {
-    test('throws an assertion although there is a filter for it (as intended))',
-        () async {
+    test('throws an assertion although there is a filter for it (as intended))', () async {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.assertion),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<AssertionError>(error, ErrorReaction.none),
+          (error, stacktrace) => errorFilter<AssertionError>(error, ErrorReaction.none),
         ]),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       expectLater(() => testCommand.execute(), throwsA(isA<AssertionError>()));
       await Future<void>.delayed(const Duration(seconds: 1));
@@ -106,13 +103,11 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.assertion),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<AssertionError>(error, ErrorReaction.none),
+          (error, stacktrace) => errorFilter<AssertionError>(error, ErrorReaction.none),
         ]),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       testCommand.execute();
       await Future<void>.delayed(const Duration(seconds: 1));
@@ -130,8 +125,7 @@ void main() {
         errorFilter: const TableErrorFilter({Error: ErrorReaction.none}),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       testCommand.execute();
       await Future<void>.delayed(const Duration(seconds: 2));
@@ -151,8 +145,7 @@ void main() {
         }),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       testCommand.execute();
       await Future<void>.delayed(const Duration(seconds: 1));
@@ -169,13 +162,11 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<Exception>(error, ErrorReaction.throwException),
+          (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.throwException),
         ]),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       expectLater(() => testCommand.execute(), throwsA(isA<Exception>()));
       await Future<void>.delayed(const Duration(seconds: 1));
@@ -190,8 +181,7 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<Exception>(error, ErrorReaction.globalHandler),
+          (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.globalHandler),
         ]),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
@@ -212,12 +202,10 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<Exception>(error, ErrorReaction.localHandler),
+          (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.localHandler),
         ]),
       );
-      testCommand.errors
-          .listen((error, _) => localHandlerCaught = error?.error);
+      testCommand.errors.listen((error, _) => localHandlerCaught = error?.error);
       Command.globalExceptionHandler = (error, _) {
         globalHandlerCaught = error.error;
       };
@@ -241,8 +229,7 @@ void main() {
               ),
         ]),
       );
-      testCommand.errors
-          .listen((error, _) => localHandlerCaught = error?.error);
+      testCommand.errors.listen((error, _) => localHandlerCaught = error?.error);
       Command.globalExceptionHandler = (error, _) {
         globalHandlerCaught = error.error;
       };
@@ -289,8 +276,7 @@ void main() {
               ),
         ]),
       );
-      testCommand.errors
-          .listen((error, _) => localHandlerCaught = error?.error);
+      testCommand.errors.listen((error, _) => localHandlerCaught = error?.error);
       Command.globalExceptionHandler = (error, _) {
         globalHandlerCaught = error.error;
       };
@@ -383,8 +369,7 @@ void main() {
               ),
         ]),
       );
-      testCommand.errors
-          .listen((error, _) => localHandlerCaught = error?.error);
+      testCommand.errors.listen((error, _) => localHandlerCaught = error?.error);
       testCommand.execute();
       await Future<void>.delayed(const Duration(seconds: 1));
 
@@ -426,8 +411,7 @@ void main() {
               ),
         ]),
       );
-      testCommand.errors
-          .listen((error, _) => localHandlerCaught = error?.error);
+      testCommand.errors.listen((error, _) => localHandlerCaught = error?.error);
       Command.globalExceptionHandler = (error, _) {
         globalHandlerCaught = error.error;
       };
@@ -450,8 +434,7 @@ void main() {
               ),
         ]),
       );
-      testCommand.errors
-          .listen((error, _) => localHandlerCaught = error?.error);
+      testCommand.errors.listen((error, _) => localHandlerCaught = error?.error);
       Command.globalExceptionHandler = (error, _) {
         globalHandlerCaught = error.error;
       };
@@ -494,13 +477,11 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<Exception>(error, ErrorReaction.none),
+          (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.none),
         ]),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       expectLater(() => testCommand.execute(), throwsA(isA<Exception>()));
       await Future<void>.delayed(const Duration(seconds: 1));
@@ -517,13 +498,11 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<Exception>(error, ErrorReaction.globalHandler),
+          (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.globalHandler),
         ]),
       );
       testCommand.errors.listen((error, _) => localHandlerCaught = error);
-      Command.globalExceptionHandler =
-          (error, _) => globalHandlerCaught = error.error;
+      Command.globalExceptionHandler = (error, _) => globalHandlerCaught = error.error;
 
       expectLater(() => testCommand.execute(), throwsA(isA<Exception>()));
       await Future<void>.delayed(const Duration(seconds: 1));
@@ -538,8 +517,7 @@ void main() {
       final testCommand = Command.createAsyncNoParamNoResult(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
-          (error, stacktrace) =>
-              errorFilter<Exception>(error, ErrorReaction.localHandler),
+          (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.localHandler),
         ]),
       );
       testCommand.errors.listen((error, _) {

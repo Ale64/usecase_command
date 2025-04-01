@@ -1,4 +1,26 @@
-part of './flutter_command.dart';
+library usecase_command;
+
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:functional_listener/functional_listener.dart';
+import 'package:quiver/core.dart';
+import 'package:stack_trace/stack_trace.dart';
+
+import 'error_filters.dart';
+
+export 'error_filters.dart';
+export 'package:functional_listener/functional_listener.dart';
+
+part './flutter_command.dart';
+part './async_command.dart';
+part './mock_command.dart';
+part './sync_command.dart';
+part './undoable_command.dart';
+part './command_builder.dart';
+part './usecase_command_async.dart';
+part './usecase_command_sync.dart';
 
 abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends Command<TParam, TResult> {
   UsecaseCommand({
@@ -17,8 +39,9 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
 
   void call([TParam? param]) => execute(param);
 
-  void setUsecase(TUsecase usecase) {
+  UsecaseCommand<TUsecase, TParam, TResult> setUsecase(TUsecase usecase) {
     _usecase = usecase;
+    return this;
   }
 
   static UsecaseCommand<TUsecase, void, void> createSyncNoParamNoResult<TUsecase extends Object>(

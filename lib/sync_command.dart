@@ -1,4 +1,4 @@
-part of './flutter_command.dart';
+part of './usecase_command.dart';
 
 class CommandSync<TParam, TResult> extends Command<TParam, TResult> {
   final TResult Function(TParam)? _func;

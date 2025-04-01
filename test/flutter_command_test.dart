@@ -2,7 +2,7 @@
 
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter/material.dart';
-import 'package:usecase_command/flutter_command.dart';
+import 'package:usecase_command/usecase_command.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// An object that can assist in representing the current state of Command while
@@ -38,8 +38,7 @@ class CustomException implements Exception {
 
   @override
   // ignore: hash_and_equals
-  bool operator ==(Object other) =>
-      other is CustomException && other.message == message;
+  bool operator ==(Object other) => other is CustomException && other.message == message;
 
   @override
   int get hashCode => message.hashCode;
@@ -54,10 +53,8 @@ void main() {
   /// into a list and keep it for comparison later.
   final Collector<bool> canExecuteCollector = Collector<bool>();
   final Collector<bool> isExecutingCollector = Collector<bool>();
-  final Collector<CommandResult> cmdResultCollector =
-      Collector<CommandResult>();
-  final Collector<CommandError> thrownExceptionCollector =
-      Collector<CommandError>();
+  final Collector<CommandResult> cmdResultCollector = Collector<CommandResult>();
+  final Collector<CommandError> thrownExceptionCollector = Collector<CommandError>();
   final Collector pureResultCollector = Collector();
 
   /// A utility method to setup [Collector] for all the [ValueListenable] in a
@@ -168,8 +165,7 @@ void main() {
       expect(insteadCalledCount, 1);
     });
 
-    test(
-        'Execute simple async action with canExecute restriction with ifRestrictedInstead handler and param',
+    test('Execute simple async action with canExecute restriction with ifRestrictedInstead handler and param',
         () async {
       // restriction false means command can execute
       // if restriction is true, then command cannot execute.
@@ -339,13 +335,9 @@ void main() {
       expect(pureResultCollector.values, [
         '47114711',
       ]);
-      expect(cmdResultCollector.values, [
-        const CommandResult<String?, String?>('4711', '47114711', null, false)
-      ]);
+      expect(cmdResultCollector.values, [const CommandResult<String?, String?>('4711', '47114711', null, false)]);
     });
-    test(
-        'Execute simple sync function with parameter and result with nullable types',
-        () {
+    test('Execute simple sync function with parameter and result with nullable types', () {
       int executionCount = 0;
       final command = Command.createSync<String?, String?>(
         (s) {
@@ -580,8 +572,7 @@ void main() {
       });
     });
 
-    test('Execute simple async function with parameter and return value',
-        () async {
+    test('Execute simple async function with parameter and return value', () async {
       var executionCount = 0;
 
       final command = Command.createAsync<String, String>(
@@ -709,9 +700,7 @@ void main() {
       ]);
     });
 
-    test(
-        'Execute simple async function called twice with delay and emitLastResult=true',
-        () async {
+    test('Execute simple async function called twice with delay and emitLastResult=true', () async {
       var executionCount = 0;
 
       final command = Command.createAsync<String, String>(
@@ -770,12 +759,9 @@ void main() {
       throw CustomException('Intentionally');
     }
 
-    test(
-        'async function with exception with firstLocalThenGlobal and listeners',
-        () async {
+    test('async function with exception with firstLocalThenGlobal and listeners', () async {
       final command = Command.createAsync<String, String>(slowAsyncFunctionFail,
-          initialValue: 'Initial Value',
-          errorFilter: const ErrorHandlerGlobalIfNoLocal());
+          initialValue: 'Initial Value', errorFilter: const ErrorHandlerGlobalIfNoLocal());
 
       setupCollectors(command);
 
@@ -907,8 +893,7 @@ void main() {
 
       final Stopwatch sw = Stopwatch()..start();
       final commandFuture = command.executeWithFuture('Done');
-      final result =
-          await commandFuture.timeout(const Duration(milliseconds: 50));
+      final result = await commandFuture.timeout(const Duration(milliseconds: 50));
       final duration = sw.elapsedMilliseconds;
       sw.stop();
 
@@ -917,8 +902,7 @@ void main() {
       expect(result, 'Done');
     });
 
-    test('Check globalExceptionHadnler is called in Sync/Async Command',
-        () async {
+    test('Check globalExceptionHadnler is called in Sync/Async Command', () async {
       final command = Command.createSync<String, String>(
         (s) {
           throw CustomException('Intentional');
@@ -933,8 +917,7 @@ void main() {
           expect(ce, isA<CommandError>());
           expect(
             ce,
-            CommandError<dynamic>(
-                paramData: 'Done', error: CustomException('Intentional')),
+            CommandError<dynamic>(paramData: 'Done', error: CustomException('Intentional')),
           );
         },
       );
@@ -1002,11 +985,9 @@ void main() {
       return s;
     }
 
-    test("Test default notification behaviour when value doesn't change",
-        () async {
+    test("Test default notification behaviour when value doesn't change", () async {
       int executionCount = 0;
-      final Command commandForNotificationTest =
-          Command.createAsync<String, String>(
+      final Command commandForNotificationTest = Command.createAsync<String, String>(
         (s) async {
           executionCount++;
           return slowAsyncFunction(s);
@@ -1053,8 +1034,7 @@ void main() {
 
     test('Test default notification behaviour when value changes', () async {
       int executionCount = 0;
-      final Command commandForNotificationTest =
-          Command.createAsync<String, String>(
+      final Command commandForNotificationTest = Command.createAsync<String, String>(
         (s) async {
           executionCount++;
           return slowAsyncFunction(s);
@@ -1099,8 +1079,7 @@ void main() {
 
     test('Test notifyOnlyWhenValueChanges flag as true', () async {
       int executionCount = 0;
-      final Command commandForNotificationTest =
-          Command.createAsync<String, String>(
+      final Command commandForNotificationTest = Command.createAsync<String, String>(
         (s) async {
           executionCount++;
           return slowAsyncFunction(s);
@@ -1147,8 +1126,7 @@ void main() {
 
     test('Test notifyOnlyWhenValueChanges flag as false', () async {
       int executionCount = 0;
-      final Command commandForNotificationTest =
-          Command.createAsync<String, String>(
+      final Command commandForNotificationTest = Command.createAsync<String, String>(
         (s) async {
           executionCount++;
           return slowAsyncFunction(s);
@@ -1397,9 +1375,7 @@ void main() {
     });
   });
   group('UndoableCommand', () {
-    test(
-        'Execute simple async function with no Parameter no Result that throws',
-        () {
+    test('Execute simple async function with no Parameter no Result that throws', () {
       var executionCount = 0;
       var undoCount = 0;
       var undoValue = 0;
@@ -1487,9 +1463,7 @@ void main() {
         'ParamData param - Data: result - HasError: false - IsExecuting: false',
       );
       expect(
-        CommandError<String>(
-                paramData: 'param', error: CustomException('Intentional'))
-            .toString(),
+        CommandError<String>(paramData: 'param', error: CustomException('Intentional')).toString(),
         'CustomException: Intentional - from Command: Command Property not set for param: param,\nStacktrace: null',
       );
     });

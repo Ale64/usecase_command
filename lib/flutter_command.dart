@@ -1,27 +1,5 @@
 // ignore_for_file: avoid_positional_boolean_parameters
-library flutter_command;
-
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:functional_listener/functional_listener.dart';
-import 'package:quiver/core.dart';
-import 'package:stack_trace/stack_trace.dart';
-
-import 'error_filters.dart';
-
-export 'error_filters.dart';
-export 'package:functional_listener/functional_listener.dart';
-
-part './async_command.dart';
-part './mock_command.dart';
-part './sync_command.dart';
-part './undoable_command.dart';
-part './command_builder.dart';
-part './usecase_command.dart';
-part './usecase_command_async.dart';
-part './usecase_command_sync.dart';
+part of './usecase_command.dart';
 
 /// Combined execution state of a `Command` represented using four of its fields.
 /// A [CommandResult] will be issued for any state change of any of its fields

@@ -1,4 +1,4 @@
-part of flutter_command;
+part of './usecase_command.dart';
 
 class CommandBuilder<TParam, TResult> extends StatelessWidget {
   final Command<TParam, TResult> command;
@@ -9,8 +9,7 @@ class CommandBuilder<TParam, TResult> extends StatelessWidget {
 
   /// If your command has a return value, you can use this builder to build a widget
   /// when the command is executed successfully.
-  final Widget Function(BuildContext context, TResult data, TParam? param)?
-      onData;
+  final Widget Function(BuildContext context, TResult data, TParam? param)? onData;
 
   /// If the command has no return value or returns null, this builder will be called when the
   /// command is executed successfully.
@@ -44,18 +43,11 @@ class CommandBuilder<TParam, TResult> extends StatelessWidget {
       valueListenable: command.results,
       builder: (context, result, _) {
         return result.toWidget(
-          onData: onData != null
-              ? (data, paramData) => onData!.call(context, data, paramData)
-              : null,
-          onSuccess: onSuccess != null
-              ? (paramData) => onSuccess!.call(context, paramData)
-              : null,
-          onNullData: onNullData != null
-              ? (paramData) => onNullData!.call(context, paramData)
-              : null,
+          onData: onData != null ? (data, paramData) => onData!.call(context, data, paramData) : null,
+          onSuccess: onSuccess != null ? (paramData) => onSuccess!.call(context, paramData) : null,
+          onNullData: onNullData != null ? (paramData) => onNullData!.call(context, paramData) : null,
           whileExecuting: whileExecuting != null
-              ? (lastData, paramData) =>
-                  whileExecuting!.call(context, lastData, paramData)
+              ? (lastData, paramData) => whileExecuting!.call(context, lastData, paramData)
               : null,
           onError: (lastData, error, paramData) {
             if (onError == null) {
@@ -73,8 +65,7 @@ class CommandBuilder<TParam, TResult> extends StatelessWidget {
   }
 }
 
-extension ToWidgeCommandResult<TParam, TResult>
-    on CommandResult<TParam, TResult> {
+extension ToWidgeCommandResult<TParam, TResult> on CommandResult<TParam, TResult> {
   Widget toWidget({
     Widget Function(TResult result, TParam? param)? onData,
     Widget Function(TParam? param)? onSuccess,
@@ -82,8 +73,7 @@ extension ToWidgeCommandResult<TParam, TResult>
     Widget Function(TResult? lastResult, TParam? param)? whileExecuting,
     Widget Function(Object error, TResult? lastResult, TParam? param)? onError,
   }) {
-    assert(onData != null || onSuccess != null,
-        'You have to provide at least a builder for onData or onSuccess');
+    assert(onData != null || onSuccess != null, 'You have to provide at least a builder for onData or onSuccess');
     if (error != null) {
       return onError?.call(error!, data, paramData) ?? const SizedBox();
     }
