@@ -108,7 +108,7 @@ void main() {
   group('Synchronous Command Testing', () {
     test('Execute simple sync action No Param No Result', () {
       int executionCount = 0;
-      final command = Command.createSyncNoParamNoResult(() => executionCount++);
+      final command = Command.createSyncVoid(() => executionCount++);
 
       expect(command.canExecute.value, true);
 
@@ -135,7 +135,7 @@ void main() {
       var executionCount = 0;
       var insteadCalledCount = 0;
 
-      final command = Command.createSyncNoParamNoResult(
+      final command = Command.createSyncVoid(
         () => executionCount++,
         restriction: restriction,
         ifRestrictedExecuteInstead: () {
@@ -175,7 +175,7 @@ void main() {
       var executionCount = 0;
       int? insteadCalledParam;
 
-      final command = Command.createAsyncNoResult<int>(
+      final command = Command.createAsyncParam<int>(
         (param) async {
           executionCount++;
         },
@@ -210,7 +210,7 @@ void main() {
     });
 
     test('Execute simple sync action with exception', () {
-      final command = Command.createSyncNoParamNoResult(
+      final command = Command.createSyncVoid(
         () => throw CustomException('Intentional'),
       );
 
@@ -247,7 +247,7 @@ void main() {
 
     test('Execute simple sync action with parameter', () {
       int executionCount = 0;
-      final command = Command.createSyncNoResult<String>((x) {
+      final command = Command.createSyncParam<String>((x) {
         print('action: $x');
         executionCount++;
       });
@@ -269,7 +269,7 @@ void main() {
 
     test('Execute simple sync function without parameter', () {
       int executionCount = 0;
-      final command = Command.createSyncNoParam<String>(
+      final command = Command.createSyncResult<String>(
         () {
           print('action: ');
           executionCount++;
@@ -400,7 +400,7 @@ void main() {
     test('Execute simple async function with no Parameter no Result', () {
       var executionCount = 0;
 
-      final command = Command.createAsyncNoParamNoResult(
+      final command = Command.createAsyncVoid(
         () async {
           executionCount++;
           await slowAsyncFunction('no pram');
@@ -485,7 +485,7 @@ void main() {
     test('Execute simple async function with No parameter', () async {
       var executionCount = 0;
 
-      final command = Command.createAsyncNoParam<String>(
+      final command = Command.createAsyncResult<String>(
         () async {
           executionCount++;
           // ignore: unnecessary_await_in_return
@@ -530,7 +530,7 @@ void main() {
     test('Execute simple async function with parameter', () async {
       var executionCount = 0;
 
-      final command = Command.createAsyncNoResult<String>(
+      final command = Command.createAsyncParam<String>(
         (s) async {
           executionCount++;
           await slowAsyncFunction(s);
@@ -1175,7 +1175,7 @@ void main() {
 
   group('Test Command Builder', () {
     testWidgets('Test Command Builder', (WidgetTester tester) async {
-      final testCommand = Command.createAsyncNoParam<String>(
+      final testCommand = Command.createAsyncResult<String>(
         () async {
           await Future<void>.delayed(const Duration(seconds: 2));
           print('Command is called');
@@ -1217,7 +1217,7 @@ void main() {
     });
 
     testWidgets('Test Command Builder On error', (WidgetTester tester) async {
-      final testCommand = Command.createAsyncNoParam<String>(
+      final testCommand = Command.createAsyncResult<String>(
         () async {
           await Future<void>.delayed(const Duration(seconds: 2));
           throw CustomException('Exception From Command');
@@ -1268,7 +1268,7 @@ void main() {
       );
     });
     testWidgets('Test toWidget with Data', (WidgetTester tester) async {
-      final testCommand = Command.createAsyncNoParam<String>(
+      final testCommand = Command.createAsyncResult<String>(
         () async {
           await Future<void>.delayed(const Duration(seconds: 2));
           return 'New Value';
@@ -1319,7 +1319,7 @@ void main() {
     });
 
     testWidgets('Test toWidget with Error', (WidgetTester tester) async {
-      final testCommand = Command.createAsyncNoParam<String>(
+      final testCommand = Command.createAsyncResult<String>(
         () async {
           await Future<void>.delayed(const Duration(seconds: 2));
           throw CustomException('Exception From Command');

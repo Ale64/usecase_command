@@ -22,6 +22,10 @@ part './command_builder.dart';
 part './usecase_command_async.dart';
 part './usecase_command_sync.dart';
 
+typedef UsecaseCommandV<TUsecase extends Object> = UsecaseCommand<TUsecase, void, void>;
+typedef UsecaseCommandP<TUsecase extends Object, TParam> = UsecaseCommand<TUsecase, TParam, void>;
+typedef UsecaseCommandR<TUsecase extends Object, TResult> = UsecaseCommand<TUsecase, void, TResult>;
+
 abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends Command<TParam, TResult> {
   UsecaseCommand({
     required super.initialValue,
@@ -44,7 +48,7 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
     return this;
   }
 
-  static UsecaseCommand<TUsecase, void, void> createSyncNoParamNoResult<TUsecase extends Object>(
+  static UsecaseCommandV<TUsecase> createSyncVoid<TUsecase extends Object>(
     void Function(TUsecase) action, {
     ValueListenable<bool>? restriction,
     void Function()? ifRestrictedExecuteInstead,
@@ -66,7 +70,7 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
     );
   }
 
-  static UsecaseCommand<TUsecase, TParam, void> createSyncNoResult<TUsecase extends Object, TParam>(
+  static UsecaseCommandP<TUsecase, TParam> createSyncParam<TUsecase extends Object, TParam>(
     void Function(TUsecase, TParam) action, {
     ValueListenable<bool>? restriction,
     ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
@@ -88,7 +92,7 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
     );
   }
 
-  static UsecaseCommand<TUsecase, void, TResult> createSyncNoParam<TUsecase extends Object, TResult>(
+  static UsecaseCommandR<TUsecase, TResult> createSyncResult<TUsecase extends Object, TResult>(
     TResult Function(TUsecase) func, {
     required TResult initialValue,
     ValueListenable<bool>? restriction,
@@ -136,7 +140,7 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
     );
   }
 
-  static UsecaseCommand<TUsecase, void, void> createAsyncNoParamNoResult<TUsecase extends Object>(
+  static UsecaseCommandV<TUsecase> createAsyncVoid<TUsecase extends Object>(
     Future<void> Function(TUsecase) action, {
     ValueListenable<bool>? restriction,
     void Function()? ifRestrictedExecuteInstead,
@@ -158,7 +162,7 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
     );
   }
 
-  static UsecaseCommand<TUsecase, TParam, void> createAsyncNoResult<TUsecase extends Object, TParam>(
+  static UsecaseCommandP<TUsecase, TParam> createAsyncParam<TUsecase extends Object, TParam>(
     Future<void> Function(TUsecase, TParam) action, {
     ValueListenable<bool>? restriction,
     ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
@@ -180,7 +184,7 @@ abstract class UsecaseCommand<TUsecase extends Object, TParam, TResult> extends 
     );
   }
 
-  static UsecaseCommand<TUsecase, void, TResult> createAsyncNoParam<TUsecase extends Object, TResult>(
+  static UsecaseCommandR<TUsecase, TResult> createAsyncResult<TUsecase extends Object, TResult>(
     Future<TResult> Function(TUsecase) func, {
     required TResult initialValue,
     ValueListenable<bool>? restriction,

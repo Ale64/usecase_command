@@ -1,6 +1,10 @@
 // ignore_for_file: avoid_positional_boolean_parameters
 part of './usecase_command.dart';
 
+typedef CommandV = Command<void, void>;
+typedef CommandP<TParam> = Command<TParam, void>;
+typedef CommandR<TResult> = Command<void, TResult>;
+
 /// Combined execution state of a `Command` represented using four of its fields.
 /// A [CommandResult] will be issued for any state change of any of its fields
 /// During normal command execution you will get this items by listening at the command's [.results] ValueListenable.
@@ -698,7 +702,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// it's listeners if the value has changed.
   /// [debugName] optional identifier that is included when you register a [globalExceptionHandler]
   /// or a [loggingHandler]
-  static Command<void, void> createSyncNoParamNoResult(
+  static CommandV createSyncVoid(
     void Function() action, {
     ValueListenable<bool>? restriction,
     void Function()? ifRestrictedExecuteInstead,
@@ -745,7 +749,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// it's listeners if the value has changed.
   /// [debugName] optional identifier that is included when you register a [globalExceptionHandler]
   /// or a [loggingHandler]
-  static Command<TParam, void> createSyncNoResult<TParam>(
+  static CommandP<TParam> createSyncParam<TParam>(
     void Function(TParam x) action, {
     ValueListenable<bool>? restriction,
     ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
@@ -794,7 +798,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// it's listeners if the value has changed.
   /// [debugName] optional identifier that is included when you register a [globalExceptionHandler]
   /// or a [loggingHandler]
-  static Command<void, TResult> createSyncNoParam<TResult>(
+  static CommandR<TResult> createSyncResult<TResult>(
     TResult Function() func, {
     required TResult initialValue,
     ValueListenable<bool>? restriction,
@@ -894,7 +898,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// it's listeners if the value has changed.
   /// [debugName] optional identifier that is included when you register a [globalExceptionHandler]
   /// or a [loggingHandler]
-  static Command<void, void> createAsyncNoParamNoResult(
+  static CommandV createAsyncVoid(
     Future<void> Function() action, {
     ValueListenable<bool>? restriction,
     void Function()? ifRestrictedExecuteInstead,
@@ -938,7 +942,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// it's listeners if the value has changed.
   /// [debugName] optional identifier that is included when you register a [globalExceptionHandler]
   /// or a [loggingHandler]
-  static Command<TParam, void> createAsyncNoResult<TParam>(
+  static CommandP<TParam> createAsyncParam<TParam>(
     Future<void> Function(TParam x) action, {
     ValueListenable<bool>? restriction,
     ExecuteInsteadHandler<TParam>? ifRestrictedExecuteInstead,
@@ -984,7 +988,7 @@ abstract class Command<TParam, TResult> extends CustomValueNotifier<TResult> {
   /// it's listeners if the value has changed.
   /// [debugName] optional identifier that is included when you register a [globalExceptionHandler]
   /// or a [loggingHandler]
-  static Command<void, TResult> createAsyncNoParam<TResult>(
+  static CommandR<TResult> createAsyncResult<TResult>(
     Future<TResult> Function() func, {
     required TResult initialValue,
     ValueListenable<bool>? restriction,

@@ -81,7 +81,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.assertion),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<AssertionError>(error, ErrorReaction.none),
@@ -100,7 +100,7 @@ void main() {
       Object? localHandlerCaught;
 
       Command.assertionsAlwaysThrow = false;
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.assertion),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<AssertionError>(error, ErrorReaction.none),
@@ -120,7 +120,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.error),
         errorFilter: const TableErrorFilter({Error: ErrorReaction.none}),
       );
@@ -138,7 +138,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: const TableErrorFilter({
           Exception: ErrorReaction.none,
@@ -159,7 +159,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.throwException),
@@ -178,7 +178,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.globalHandler),
@@ -199,7 +199,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.localHandler),
@@ -220,7 +220,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -244,7 +244,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -267,7 +267,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -291,7 +291,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParam<bool>(
+      final testCommand = Command.createAsyncResult<bool>(
         () => asyncFunctionBoolExeption(),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -321,7 +321,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -341,7 +341,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -360,7 +360,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -380,7 +380,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -402,7 +402,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -425,7 +425,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -448,7 +448,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(
@@ -474,7 +474,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.none),
@@ -495,7 +495,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.globalHandler),
@@ -514,7 +514,7 @@ void main() {
       Object? globalHandlerCaught;
       Object? localHandlerCaught;
 
-      final testCommand = Command.createAsyncNoParamNoResult(
+      final testCommand = Command.createAsyncVoid(
         () => asyncFunction1(TestType.exception),
         errorFilter: PredicatesErrorFilter([
           (error, stacktrace) => errorFilter<Exception>(error, ErrorReaction.localHandler),
